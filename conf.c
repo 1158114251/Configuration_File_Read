@@ -1,14 +1,12 @@
 /*
  *2018-02-25 13:58:36
- * 
- * 
  */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-int key_match(const char * file_path,const char * file_name, const char * key, char* value)
+int key_match(const char * file_path, const char * key, char* value)
 {
 
 
@@ -20,12 +18,6 @@ int key_match(const char * file_path,const char * file_name, const char * key, c
 	char* p_toline = line;
 	FILE * fp = NULL;
 	
-	if (!file_path)
-	{
- 
-	}
-
-
 	if (!(key && value))
 	{
 		goto out;
@@ -44,8 +36,10 @@ int key_match(const char * file_path,const char * file_name, const char * key, c
 		        *start='\0';
 		}
 		if (start = strstr(line, key), !start)
+		{
 			continue;
-		start = line;
+		}
+                start = line;
 		while (*start == ' ')start++;
 		end = start;
 		while (*end != ' '&& *end != '=')end++;
@@ -101,15 +95,7 @@ out:
 int main(void)
 {
 
-#define _INI_CFG_PATH_
-#ifdef  _INI_CFG_PATH_  
 #define INI_CFG_PATH "cfg.ini"
-#define INI_CFG_NAME  NULL
-#else
-#define INI_CFG_PATH  NULL      
-#define INI_CFG_NAME  "cfg.ini"
-#endif
-
 
 	char input_buf[BUF_SIZE] = { 0 }, \
 		 output_buf[BUF_SIZE] = { 0 };
@@ -117,9 +103,9 @@ int main(void)
 	{
 		printf("Please input key:");
 		scanf("%s", input_buf);
-		if (key_match(INI_CFG_PATH, INI_CFG_NAME, input_buf, output_buf) < 0)
+		if (key_match(INI_CFG_PATH, input_buf, output_buf) < 0)
 		{
-			printf("Unable to get the corresponding key value\n");
+			printf("Unable to get the corresponding key value!\n");
 		}
 		else
 		{
