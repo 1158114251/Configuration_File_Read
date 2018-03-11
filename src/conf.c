@@ -1,22 +1,29 @@
 /*
  *2018-02-25 13:58:36
- */
+ *BY: 张飞online
+ *邮箱：1158114251@qq.com
+ *配置文件库
+*/
+#include "conf.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
-int key_match(const char * file_path, const char * key, char* value)
+/*
+一个配置文件读写函数，用于一些程序从配置文件读取信息
+配置文件的格式设定可以参见改文件夹下的ini文件。
+该函数
+
+
+*/
+
+int key_match(const char * file_path, const char * key, char** value)
 {
 
 
-#define BUF_SIZE   1024 
-#define SPLIT_CHAR "="  
-#define NOTES_CHAR "#"  
 
 	char line[BUF_SIZE] = { 0 }, *start, *end;
 	char* p_toline = line;
 	FILE * fp = NULL;
+    unsigned int size;
 	
 	if (!(key && value))
 	{
@@ -61,16 +68,23 @@ int key_match(const char * file_path, const char * key, char* value)
 				while (*end != ' '&& *end != '\0'&&*end != '\n'&&*end != '\r')
 					end++;
 				*end = '\0';
-				if (!strlen(start))
+				if (size=strlen(start),!size)
 				{
 					goto out;
 				}
 				else
-				{
-					strcpy(value, start);
-					if (fp)
+				{   
+                   if(*value =(char *) malloc(size),!*value)
+                   {
+                     goto out;
+                   }
+				   else
+                    {
+                        strcpy(*value, start);
+					    if (fp)
 						fclose(fp);
-					return 0;
+					    return size;
+                   }
 				}
 			}
 
@@ -86,36 +100,23 @@ out:
 	return -1;
 }
 
+
 /*
 
-   tets
+ 键值对销毁
 
 */
 
-int main(void)
+int key_value_free(char ** key)
 {
 
-#define INI_CFG_PATH "cfg.ini"
+ free(*key);
+ *key=NULL;
 
-	char input_buf[BUF_SIZE] = { 0 }, \
-		 output_buf[BUF_SIZE] = { 0 };
-	while (1)
-	{
-		printf("Please input key:");
-		scanf("%s", input_buf);
-		if (key_match(INI_CFG_PATH, input_buf, output_buf) < 0)
-		{
-			printf("Unable to get the corresponding key value!\n");
-		}
-		else
-		{
-			printf("\n%s = %s\n", input_buf, output_buf);
-		}
-
-
-	}
-	system("pause");
-	return 0;
+return 0;
 }
+
+
+
 
 
